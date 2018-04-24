@@ -53,15 +53,15 @@
     } else if ($user_type == "front_desk") {
         switch ($return) {
             case 0:
-                echo "status=0&message=registration successful";
+                header("location:../../public/index.php?page=register_student&status=0");
                 break;
             
             case 1:
-                echo "status=1&message=registration failed";
+                header("location:../../public/index.php?page=register_student&status=1");
                 break;
 
             case -1:
-                echo "status=-1&message=no request method specified";
+                header("location:../../public/index.php?page=register_student&status=1");
                 break;
         }
     } else {

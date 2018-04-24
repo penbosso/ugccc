@@ -134,7 +134,7 @@
             $current_time = time();
             $sql = "SELECT b.*  FROM booking b JOIN assign_counsellor ac ON "
                  . "b.assign_counsellor_id=ac.id WHERE ac.counsel_id='{$counsellor_id}' AND "
-                 . "b.scheduled_date>='{$current_time}'";
+                 . "b.scheduled_date<='{$current_time}'";
             $exiting_bookings = Booking::find_by_sql($sql);
             return $exiting_bookings;
         }
@@ -147,6 +147,7 @@
             //get all bookings 
             $bookings = Counsellor::get_booked_period($counsellor_id);
             
+            //print_r($bookings);
             //initialize a index for loop
             $index = 0;
 

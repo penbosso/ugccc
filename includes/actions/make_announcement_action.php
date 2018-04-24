@@ -16,34 +16,35 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $announcement->date_created = $date;
 
     //checking if image was uploaded
-    if(isset($_FILES["image"]["name"])){
+    if(isset($_FILES["image_file"]["name"])){
         //getting info about the uploaded image 
-        $file_info = pathinfo($_FILES["image"]["name"]);
+        $file_info = pathinfo($_FILES["image_file"]["name"]);
         $ext=$file_info['extension'];
         $image_name="img_".rand(1000, 9999).".".$ext;
         $announcement->image = $image_name; //setting the name to announcement object
 
         $uploadpath = "../../images/".$image_name;
 
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $uploadpath) && 
+
+        if (move_uploaded_file($_FILES["image_file"]["tmp_name"], $uploadpath) && 
             $announcement->create()) {
-            echo "status=0&message=operation successfull";
+            header("location:../../public/index.php?page=make_announcement&status=0");
         } else {
-            echo "status=1&message=operation failed";
+             header("location:../../public/index.php?page=make_announcement&status=1");
         }
     } else {
         //else save only announcement to db 
         $announcement->image = "";
         if ($announcement->create()) {
-            echo "status=0&message=operation successfull";
+            header("location:../../public/index.php?page=make_announcement&status=0");
         } else {
-            echo "status=1&message=operation failed";
+             header("location:../../public/index.php?page=make_announcement&status=1");
         }
     }
     
 } else {
     //indicate error
-    echo "status=1&message=no request method specified";
+     header("location:../../public/index.php?page=make_announcement&status=1");
 }
 
 ?>

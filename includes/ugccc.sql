@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 16, 2018 at 08:03 AM
+-- Generation Time: Apr 19, 2018 at 05:44 PM
 -- Server version: 10.2.14-MariaDB
 -- PHP Version: 7.1.16
 
@@ -44,7 +44,8 @@ CREATE TABLE `announcement` (
 INSERT INTO `announcement` (`id`, `title`, `content`, `image`, `created_by_user`, `date_created`) VALUES
 (1, 'kofi', 'kosdkosdkub dfdfdf', NULL, 1, '2018-04-12 06:47:39'),
 (5, 'carss', 'kosdkosdkub dfdfdf', 'img_1009.png', 1, '2018-04-12 07:28:49'),
-(6, 'carss', 'kosdkosdkub dfdfdf', 'img_3055.png', 1, '2018-04-12 15:57:20');
+(6, 'carss', 'kosdkosdkub dfdfdf', 'img_3055.png', 1, '2018-04-12 15:57:20'),
+(7, 'edis hair', 'i love it', 'img_6926.png', 1, '2018-04-19 17:02:10');
 
 -- --------------------------------------------------------
 
@@ -65,7 +66,10 @@ CREATE TABLE `assign_counsellor` (
 
 INSERT INTO `assign_counsellor` (`id`, `counsel_id`, `date_assigned`, `complaint_id`) VALUES
 (1, 1, '2018-04-06', 5),
-(15, 1, '2018-04-16', 55);
+(15, 1, '2018-04-16', 55),
+(16, 2, '2018-04-17', 56),
+(17, 2, '2018-04-19', 57),
+(18, 1, '2018-04-19', 58);
 
 -- --------------------------------------------------------
 
@@ -86,7 +90,8 @@ CREATE TABLE `booking` (
 
 INSERT INTO `booking` (`id`, `scheduled_date`, `location_id`, `assign_counsellor_id`) VALUES
 (1, '1523874600', 1, 1),
-(2, '1524479400', 1, 55);
+(2, '1524479400', 1, 55),
+(3, '1524479400', 1, 55);
 
 -- --------------------------------------------------------
 
@@ -110,7 +115,10 @@ CREATE TABLE `complaint` (
 
 INSERT INTO `complaint` (`id`, `student_id`, `date_logged`, `date_couns_started`, `date_couns_ended`, `stressor`, `short_desc`) VALUES
 (5, 3, '2018-04-14', '2018-04-16 07:50:25', '2018-04-16 07:53:10', 'anxiety', 'afriad of exams '),
-(55, 3, '2018-04-16', '', '', 'anxiety', 'afriad of exams ');
+(55, 3, '2018-04-16', '', '', 'anxiety', 'afriad of exams '),
+(56, 3, '2018-04-17', '', '', 'anxiety', 'afriad of exams '),
+(57, 3, '2018-04-19', '', '', 'anxiety', 'afriad of exams '),
+(58, 3, '2018-04-19', '', '', 'anxiety', 'afriad of exams ');
 
 -- --------------------------------------------------------
 
@@ -249,7 +257,9 @@ INSERT INTO `student` (`id`, `student_id`, `last_name`, `first_name`, `other_nam
 (1, NULL, 'mensah', 'kofi', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd '),
 (3, '10518900', 'mensah', 'kofi', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd'),
 (4, '104556212', 'mensah', 'kofi', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd '),
-(5, '104556212', 'mensah', 'kofi', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd ');
+(5, '104556212', 'mensah', 'kofi', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd '),
+(6, '10516064', 'mensah', 'edinam', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd '),
+(7, '10516064', 'mensah', 'edinam', 'aba', '0554587986', 'kmens@gmail.com', 'mensah sarbah', 'computer science', 'IT', 'hokd ');
 
 -- --------------------------------------------------------
 
@@ -359,25 +369,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `announcement`
 --
 ALTER TABLE `announcement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `assign_counsellor`
 --
 ALTER TABLE `assign_counsellor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `complaint`
 --
 ALTER TABLE `complaint`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `counsellor`
@@ -401,7 +411,7 @@ ALTER TABLE `speciality`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user`
