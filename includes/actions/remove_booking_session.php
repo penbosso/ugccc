@@ -7,18 +7,15 @@ include('../initialize.php');
 //check if the request method to this file is post
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     //get id of complaint to be started
-    $complaint_id = $_POST['complaint_id'];
+    $booking_id = $_POST['booking_id'];
     //fetch record with that specific id
-    $complaint = Complaint::find_by_id($complaint_id);
-    //set the date ended 
-    $complaint->date_couns_ended = mysql_datetime_format(time());
-    //save changes
-    if ($complaint->save()) {
-    header("location:../../public/index.php?page=sessions&status=0");
-} else {
-    header("location:../../public/index.php?page=sessions&status=1");
-}
-
+    $booking = booking::find_by_id($booking_id);
+    //delete booking
+    if($booking->delete()){
+      header("location:../../public/index.php?page=sessions&status=0");
+    } else {
+        header("location:../../public/index.php?page=sessions&status=1");
+    }
 
 } else {
     //indicate error

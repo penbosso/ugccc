@@ -4,7 +4,7 @@
     $page = isset($_GET['page']) ? $_GET['page'] : "sessions";
     
     //TODO:: change to get the id of currently logged in user
-    $user_id=4;
+    $user_id=2;
 
     //defines the path to the requested page's content
     switch ($page) {
@@ -211,24 +211,211 @@
     </div>
 </div>
 
+            <!--Start Session modal-->
+            <div class="modal fade" id="start_sess_modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                        <form method="POST" action="../includes/actions/start_counsel_session.php">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="defaultModalLabel">Start Session</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Are you sure you want to start this session?</h5>
+                                                    <input type="hidden" name="complaint_id" id="complaint_id" value=""/>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="" id="approve_appt_confirm">CONFIRM</button>
+                                                    <button type="button" class="" data-dismiss="modal">CLOSE</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        </div>
+            </div>
+    
+            <!--End Session modal-->
+            <div class="modal fade" id="end_sess_modal" class="" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                            <form method="POST" action="../includes/actions/end_counsel_session.php">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="defaultModalLabel">End Session</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Are you sure you want to end this session?</h5>
+                                                    <input type="hidden" name="complaint_id" id="complaint_id" value=""/>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="" id="approve_appt_confirm">CONFIRM</button>
+                                                    <button type="button" class="" data-dismiss="modal">CLOSE</button>
+                                                </div>
+                                                </form>
+                                        </div>
+                                        </div>
+            </div>
+    
+            <!--Remove Booking Session modal-->
+            <div class="modal fade" id="remove_sess_modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="defaultModalLabel">Remove Booking Session</h4>
+                                                </div>
+                                                <form method="POST" action="../includes/actions/remove_booking_session.php">
+                                                <div class="modal-body">
+                                                    <h5>Are you sure you want to remove this session?</h5>
+                                                    <input type="hidden" name="booking_id" id="assign_counsellor_id" value=""/>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="" id="approve_appt_confirm">CONFIRM</button>
+                                                    <button type="button" class="" data-dismiss="modal">CLOSE</button>
+                                                </div>
+                                                </form>
+                                        </div>
+                                        </div>
+            </div>
+    
+            <!--Add Booking Session modal-->
+            <div class="modal fade" id="add_sess_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Add Booking Session</h4>
+                        </div>
+                        <div class="modal-body">
+                                <form method="POST" action="../includes/actions/book_period.php">
+                                    <!--div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Date</label>
+                                                <input type="date" class="form-control border-input" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Location</label>
+                                                <input type="text" class="form-control border-input" >
+                                            </div>
+                                        </div>
+                                    </div-->
+                                    <input type="hidden" name="assign_counsellor_id" id="assign_counsellor_id" value=""/>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Available Time</label>
+                                                <select name="scheduled_date">
+                                                <?php 
+                                                    $sql = "SELECT c.* FROM counsellor c JOIN user u ON c.user_id=u.id "
+                                                    ."WHERE u.id='$user_id'";
+                                                   
+                                                    $object = Counsellor::find_by_sql($sql);
+                                                    $counsellor = array_shift($object);
+                                                    $available_bookings = Counsellor::get_available_booking($counsellor->id);
+                                                    
+                                                        
+                                                    foreach ($available_bookings as $available_booking) {
+                                                 ?>
+                                                    <option value="<?php echo $available_booking; ?>"><?php echo strftime("%a %d, %b %Y %H:%M GMT",$available_booking); ?></option>
+                                                <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <!--div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Short Description</label>
+                                                <textarea rows="5" class="form-control border-input" placeholder="Here can be your description"></textarea>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                    <div class="clearfix"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="" id="approve_appt_confirm">CONFIRM</button>
+                            <button type="button" class="" data-dismiss="modal">CLOSE</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    
+            <!--Refer Session modal-->
+            <div class="modal fade" id="refer_sess_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Refer Session</h4>
+                        </div>
+                        <div class="modal-body">
+                                <form method="POST" action="../includes/actions/refer_session.php">
+                                    <!--div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Date</label>
+                                                <input type="date" class="form-control border-input" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Location</label>
+                                                <input type="text" class="form-control border-input" >
+                                            </div>
+                                        </div>
+                                    </div-->
+                                      <input type="hidden" name="complaint_id" id="complaint_id" value=""/>
 
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Counsellor</label>
+                                                <select name="counsel_id">
+                                                <?php 
+                                                    $sql = "SELECT c.* FROM counsellor c JOIN user u ON c.user_id = u.id"
+                                                          ." WHERE NOT u.id='$user_id'";
+                                                    $counsellors = Counsellor::find_by_sql($sql);
+                                                    foreach ($counsellors as $counsellor ) {
+                                                        $counsellor_details = User::find_by_id($counsellor->user_id);
+                                                        $display_name = ucwords($counsellor_details->title." "
+                                                                                .$counsellor_details->first_name." "
+                                                                                .$counsellor_details->other_names." "
+                                                                                .$counsellor_details->last_name);
+                                                ?>
+                                                    <option value="<?php echo $counsellor->id; ?>"><?php echo $display_name; ?> </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="" id="approve_appt_confirm">CONFIRM</button>
+                            <button type="button" class="" data-dismiss="modal">CLOSE</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 </body>
 
     <!--   Core JS Files   -->
-    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="assets/js/jquery.min.js" type="text/javascript"></script>
+    <!--script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script-->
 	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 
 	<!--  Checkbox, Radio & Switch Plugins -->
 	<script src="assets/js/bootstrap-checkbox-radio.js"></script>
 
 	<!--  Charts Plugin -->
-	<script src="assets/js/chartist.min.js"></script>
+	<!--cript src="assets/js/chartist.min.js"></script-->
 
     <!--  Notifications Plugin    -->
     <script src="assets/js/bootstrap-notify.js"></script>
 
     <!--  Google Maps Plugin    -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+    <!--script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script-->
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="assets/js/paper-dashboard.js"></script>
@@ -239,7 +426,7 @@
 	<script type="text/javascript">
     	$(document).ready(function(){
 
-        	demo.initChartist();
+        	//demo.initChartist();
 
         	$.notify({
             	icon: 'ti-gift',
@@ -251,6 +438,39 @@
             });
 
     	});
+
+        $(document).ready(function () {
+            window.setTimeout(function() {
+                $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+                    $(this).remove(); 
+                });
+            }, 5000);
+        });
+
+        $(document).on("click", ".startModal", function () {
+            var myBookId = $(this).data('id');
+            $("#start_sess_modal #complaint_id").val( myBookId );
+        });
+
+        $(document).on("click", ".endModal", function () {
+            var myBookId = $(this).data('id');
+            $("#end_sess_modal #complaint_id").val( myBookId );
+        });
+
+        $(document).on("click", ".referModal", function () {
+            var myBookId = $(this).data('id');
+            $("#refer_sess_modal #complaint_id").val( myBookId );
+        });
+
+         $(document).on("click", ".addModal", function () {
+            var myBookId = $(this).data('id');
+            $("#add_sess_modal #assign_counsellor_id").val( myBookId );
+        });
+
+        $(document).on("click", ".removeModal", function () {
+            var myBookId = $(this).data('id');
+            $("#remove_sess_modal #assign_counsellor_id").val( myBookId );
+        });
 	</script>
 
 </html>

@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $complaint->date_couns_started = mysql_datetime_format(time());
     //save changes
     if($complaint->save()){
-        echo "status=0&message=conselling session started";
+      header("location:../../public/index.php?page=sessions&status=0");
     } else {
-        echo "status=1&message=starting counselling session failed";
+        header("location:../../public/index.php?page=sessions&status=1");
     }
 
 } else {

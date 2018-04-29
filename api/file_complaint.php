@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         exit;
     } else {
         //if found
-        //echo json_encode(array("status"=>1, "message"=>"valid student details"));
 
         //create new complaint
         $complaint = new complaint();

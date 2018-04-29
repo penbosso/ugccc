@@ -1,11 +1,23 @@
 <?php 
+    //get user details with given id $user_id
     $user = User::find_by_id($user_id);
-
+    
+    //check the type of user
     if($user->user_type == "counsellor"){
-        //sql to 
+        $time = time();
+        //sql to fetch all bookings for given counsellor 
+        $sql = "SELECT b.* FROM user u JOIN counsellor c ON u.id=c.user_id "
+            ." JOIN assign_counsellor ac ON c.id=ac.counsel_id JOIN booking b "
+            ." ON ac.id=b.assign_counsellor_id WHERE u.id='{$user->id}' AND b.scheduled_date>='$time'";
+        $bookings = Booking::find_by_sql($sql);
     } elseif($user->user_type == "front_desk") {
-
+        $sql = "";
+        $bookings = Booking::find_by_sql($sql);
     } 
+
+    if(!$bookings){
+        output_message("no counselling sessions found", "fail");
+    }   else { 
 ?>
 
 <div class="container-fluid">
@@ -22,25 +34,54 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Datetime</th>
-                            <th>Problem</th>
+                            <th>Stressor</th>
+                            <th>Description</th>
                             <th>Session Actions</th>
                         </thead>
                         <tbody>
+                        <?php 
+                            $i =1;
+                            foreach($bookings as $booking){ 
+                                $sql = "SELECT s.* FROM booking b JOIN assign_counsellor ac ON ac.id=b.assign_counsellor_id "
+                                    . "JOIN complaint c ON c.id=ac.complaint_id JOIN student s ON s.id= c.student_id "
+                                    . "WHERE b.id='{$booking->id}' ";
+                                $result = Student::find_by_sql($sql);
+                                $student = array_shift($result);
+
+                                $sql = "SELECT c.* FROM booking b JOIN assign_counsellor ac ON ac.id=b.assign_counsellor_id "
+                                    . "JOIN complaint c ON c.id=ac.complaint_id "
+                                    . "WHERE b.id='{$booking->id}' ";
+                                $result = Complaint::find_by_sql($sql);
+                                $complaint = array_shift($result);
+
+                                $sql = "SELECT ac.* FROM booking b JOIN assign_counsellor ac ON ac.id=b.assign_counsellor_id "
+                                    . "JOIN complaint c ON c.id=ac.complaint_id "
+                                    . "WHERE b.id='{$booking->id}' ";
+                                $result = AssignCounsellor::find_by_sql($sql);
+                                $assign_counsellor = array_shift($result);
+                            
+                        ?>
                             <tr>
-                                <td>1234567</td>
-                                <td>Dakota Rice</td>
-                                <td>20-11-11</td>
-                                <td>Love Issues</td>
+                                <td><?php echo $i; ?></td>
+                                <td><?php echo ucwords($student->first_name." ".$student->other_names." ".$student->last_name); ?></td>
+                                <td><?php echo strftime("%a %d, %b %Y %H:%M GMT", $booking->scheduled_date); ?></td>
+                                <td><?php echo ucwords($complaint->stressor); ?></td>
+                                <td><?php echo $complaint->short_desc; ?></td>
                                 <td>
                                     <?php if($user->user_type == "counsellor"){ ?>
-                                    <a data-toggle ="modal" href="#start_sess_modal">Start </a>|
-                                    <a data-toggle ="modal" href="#end_sess_modal"> End </a>|
+                                    <?php if($complaint->date_couns_started == "") { ?>
+                                    <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="#start_sess_modal" class="startModal">Start </a> 
+                                    <?php } else { if($complaint->date_couns_ended == ""){?>
+                                    <a data-toggle ="modal" data-id="<?php echo $assign_counsellor->id; ?>" href="#add_sess_modal" class="addModal"> Add </a> |
+                                    <a data-toggle ="modal" data-id="<?php echo $booking->id; ?>" href="#remove_sess_modal" class="removeModal"> Remove </a> |
+                                    <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="#end_sess_modal" class="endModal"> End </a> 
+                                    <?php } } } ?>
+                                    <?php if(($complaint->date_couns_ended != "")&&($complaint->date_couns_started != "")){ ?>
+                                    <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="#refer_sess_modal" class="referModal"> Refer </a> 
                                     <?php } ?>
-                                    <a data-toggle ="modal" href="#refer_sess_modal"> Refer </a>|
-                                    <a data-toggle ="modal" href="#add_sess_modal"> Add </a>|
-                                    <a data-toggle ="modal" href="#rem_sess_modal"> Remove </a>
                                 </td>
                             </tr>
+                            <?php $i++; } ?>
                         </tbody>
                     </table>
 
@@ -50,3 +91,5 @@
 
     </div>
 </div>
+
+<?php  } ?>
