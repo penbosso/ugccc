@@ -47,7 +47,6 @@
             $all_booking = self::get_all_work_period($selected_counsellor);
             //get all the booked sessions = 
             $booked_peroids = self::get_booked_period($selected_counsellor);
-             
             //getting only the time column from all_booking
             $all_booking_time = array_column($all_booking,'time');
             
@@ -62,12 +61,13 @@
                 //loop through booked_periods
                 foreach ($booked_peroids as $booked_peroid) {
                     //check if current booked_period's scheduled_time in all_booking_time
-                    if(array_search($booked_peroid->scheduled_date, $l_all_booking_time)){
+                    if(in_array($booked_peroid->scheduled_date, $l_all_booking_time)){
                         //if current booked_period's scheduled_time in all_booking_time
                         //then remove current booked_period's scheduled_time from all_booking_time
                         $l_all_booking_time = array_diff($l_all_booking_time, ["$booked_peroid->scheduled_date"]);
                     }  
                 }
+                
                 //assign result of operation to available time
                 $available_booking = $l_all_booking_time;
             } else {
@@ -134,7 +134,7 @@
             $current_time = time();
             $sql = "SELECT b.*  FROM booking b JOIN assign_counsellor ac ON "
                  . "b.assign_counsellor_id=ac.id WHERE ac.counsel_id='{$counsellor_id}' AND "
-                 . "b.scheduled_date<='{$current_time}'";
+                 . "b.scheduled_date>='{$current_time}'";
             $exiting_bookings = Booking::find_by_sql($sql);
             return $exiting_bookings;
         }

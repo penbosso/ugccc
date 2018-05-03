@@ -1,32 +1,46 @@
-<?php 
+<?php  session_start();
     include("../includes/initialize.php");
     //gets the content of the $_GET['page'] variable in to a variable $page
     $page = isset($_GET['page']) ? $_GET['page'] : "sessions";
     
+    if(!isset($_SESSION['user'])){
+        header('location:../index.php');
+    }
+
     //TODO:: change to get the id of currently logged in user
-    $user_id=2;
+    $user_id=$_SESSION['user'];
+    $user = User::find_by_id($user_id);
 
     //defines the path to the requested page's content
     switch ($page) {
+        case 'logout':
+            unset($_SESSION['user']);
+            header('location:../index.php');
+            break;
+            
         case 'make_announcement':
             $content = "contents/make_announcement.php";
             $class_ma="active";
+            $page_title = "Make Announcement";
             break;
         
         case 'register_student':
             $content = "contents/register_student.php";
             $class_rs="active";
+            $page_title = "Register Student";
             break;
 
         case 'book_session':
             $content = "contents/book_session.php";
             $class_bs="active";
+            $page_title = "Book Session";
             break;
 
         case 'sessions':
         default:
             $content = "contents/session_list.php";
             $class_s="active";
+            $page_title = "Sessions";
             break;
     }  
 ?>
@@ -63,7 +77,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/themify-icons.css" rel="stylesheet">
-
+    <script src="assets/js/new_js.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -82,7 +96,9 @@
                 </a>
             </div>
 
+            
             <ul class="nav">
+                <?php if($user->user_type == "front_desk") { ?>
                 <li class="<?php echo $class_ma; ?>">
                     <a href="?page=make_announcement">
                         <i class="ti-panel"></i>
@@ -95,6 +111,7 @@
                         <p>Register Student</p>
                     </a>
                 </li>
+                <?php } ?>
                 <li class="<?php echo $class_s; ?>">
                     <a href="?page=sessions">
                         <i class="ti-view-list-alt"></i>
@@ -121,37 +138,37 @@
                         <span class="icon-bar bar2"></span>
                         <span class="icon-bar bar3"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Make Announcement</a>
+                    <a class="navbar-brand" href="#"><?php echo $page_title; ?></a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
+                        <!--li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="ti-panel"></i>
 								<p>Stats</p>
                             </a>
-                        </li>
+                        </li-->
                         <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="ti-bell"></i>
-                                    <p class="notification">5</p>
-									<p>Notifications</p>
+                                    <!--i class="ti-bell"></i>
+                                    <p class="notification">5</p-->
+									<p><?php echo strtoupper($user->first_name); ?></p>
 									<b class="caret"></b>
                               </a>
                               <ul class="dropdown-menu">
-                                <li><a href="#">Notification 1</a></li>
+                                <!-- <li><a href="#">Notification 1</a></li>
                                 <li><a href="#">Notification 2</a></li>
                                 <li><a href="#">Notification 3</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
+                                <li><a href="#">Notification 4</a></li> -->
+                                <li><a href="?page=logout">Log out</a></li>
                               </ul>
                         </li>
-						<li>
+						<!--li>
                             <a href="#">
 								<i class="ti-settings"></i>
 								<p>Settings</p>
                             </a>
-                        </li>
+                        </li-->
                     </ul>
 
                 </div>
@@ -180,7 +197,7 @@
         </div>
 
 
-        <footer class="footer">
+        <!--footer class="footer">
             <div class="container-fluid">
                 <nav class="pull-left">
                     <ul>
@@ -206,7 +223,7 @@
                     &copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
                 </div>
             </div>
-        </footer>
+        </footer-->
 
     </div>
 </div>
@@ -398,6 +415,64 @@
                     </div>
                 </div>
             </div>
+
+            <!--Assign Couns Session modal-->
+            <div class="modal fade" id="assign_sess_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Refer Session</h4>
+                        </div>
+                        <div class="modal-body">
+                                <form method="POST" action="../includes/actions/refer_session.php">
+                                    <!--div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Date</label>
+                                                <input type="date" class="form-control border-input" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Location</label>
+                                                <input type="text" class="form-control border-input" >
+                                            </div>
+                                        </div>
+                                    </div-->
+                                      <input type="hidden" name="complaint_id" id="complaint_id" value=""/>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Counsellor</label>
+                                                <select name="counsel_id">
+                                                <?php 
+                                                    $sql = "SELECT c.* FROM counsellor c JOIN user u ON c.user_id = u.id"
+                                                          ." WHERE NOT u.id='$user_id'";
+                                                    $counsellors = Counsellor::find_by_sql($sql);
+                                                    foreach ($counsellors as $counsellor ) {
+                                                        $counsellor_details = User::find_by_id($counsellor->user_id);
+                                                        $display_name = ucwords($counsellor_details->title." "
+                                                                                .$counsellor_details->first_name." "
+                                                                                .$counsellor_details->other_names." "
+                                                                                .$counsellor_details->last_name);
+                                                ?>
+                                                    <option value="<?php echo $counsellor->id; ?>"><?php echo $display_name; ?> </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="" id="approve_appt_confirm">CONFIRM</button>
+                            <button type="button" class="" data-dismiss="modal">CLOSE</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 </body>
 
     <!--   Core JS Files   -->
@@ -428,14 +503,14 @@
 
         	//demo.initChartist();
 
-        	$.notify({
-            	icon: 'ti-gift',
-            	message: "Welcome to <b>Paper Dashboard</b> - a beautiful Bootstrap freebie for your next project."
+        	// $.notify({
+            // 	icon: 'ti-gift',
+            // 	message: "Welcome to <b>Paper Dashboard</b> - a beautiful Bootstrap freebie for your next project."
 
-            },{
-                type: 'success',
-                timer: 4000
-            });
+            // },{
+            //     type: 'success',
+            //     timer: 4000
+            // });
 
     	});
 
@@ -470,6 +545,11 @@
         $(document).on("click", ".removeModal", function () {
             var myBookId = $(this).data('id');
             $("#remove_sess_modal #assign_counsellor_id").val( myBookId );
+        });
+
+        $(document).on("click", ".assignModal", function () {
+            var myBookId = $(this).data('id');
+            $("#assign_sess_modal #assign_counsellor_id").val( myBookId );
         });
 	</script>
 
