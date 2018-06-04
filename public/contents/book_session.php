@@ -12,7 +12,7 @@
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <label>Student ID</label>
-                                    <input type="text" name="student_id" class="form-control border-input" >
+                                    <input type="text" name="student_id" class="form-control border-input" required>
                                 </div>
                             </div>
                         </div>

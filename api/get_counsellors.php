@@ -69,11 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 // $assign_counsellor->complaint_id = $complaint->id;
                 //$assign_counsellor->save();
                 //get the available booking for the given counsellor
-                $available_booking = Counsellor::get_available_booking($selected_counsellor);
+                 $available_booking = Counsellor::get_available_booking($selected_counsellor);
                 $sql = "SELECT u.* FROM user u JOIN counsellor c ON u.id=c.user_id WHERE c.id='{$selected_counsellor}'";
                 $userobject = User::find_by_sql($sql);
                 $user = array_shift($userobject);
                 //print_r($available_booking);
+                //$available_booking = get_object_vars($avail);
                 $name = ucwords($user->title." ".$user->first_name." ".$user->last_name." ");
                 //return response
                 echo json_encode(array("status"=>0, "message"=>"counsellor assigned successfully",

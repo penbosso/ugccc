@@ -13,7 +13,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>First Name</label>
-                                    <input type="text" name="first_name" class="form-control border-input" placeholder="First Name">
+                                    <input type="text" name="first_name" class="form-control border-input" placeholder="First Name" required>
                                 </div>
                             </div>
                             <div class="col-md-4">

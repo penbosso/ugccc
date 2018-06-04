@@ -69,10 +69,10 @@
                 }
                 
                 //assign result of operation to available time
-                $available_booking = $l_all_booking_time;
+                $available_booking = array_values($l_all_booking_time);
             } else {
                 //if booked_peroids == 0  then available_booking = all_booking
-                $available_booking = $all_booking_time;
+                $available_booking = array_values($all_booking_time);
             }
 
            //return results of operations

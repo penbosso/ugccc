@@ -72,7 +72,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     $booking->scheduled_date = $_POST['scheduled_date'];
                     $booking->assign_counsellor_id = $assign_counsellor->id;
                     $booking->location_id = 1;
-                    $booking->save();
+                    //$booking->save();
+                    if( $booking->save() ){
+                        $number = substr($student->telephone, 1);
+                        $message = "Hello " . ucwords($student->last_name)."\n". 
+                                   "Please be informed that you have been booked for ".
+                                   "a counselling session with ".$counsellor_name." at ".
+                                   "the counselling center on ".
+                                   strftime("%a %d, %b %Y %H:%M GMT", $_POST['scheduled_date']).
+                                   ".";
+                        $status = Message::send_message($number, $message);
+                    }
                 }
 
                 //get the available booking for the given counsellor

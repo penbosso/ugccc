@@ -32,6 +32,7 @@
     require_once(LIB_PATH.DS.'models'.DS.'assign_counsellor.php');
     require_once(LIB_PATH.DS.'models'.DS.'booking.php');
     require_once(LIB_PATH.DS.'models'.DS.'location.php');
+    require_once(LIB_PATH.DS.'models'.DS.'message.php');
 
     
 ?>
