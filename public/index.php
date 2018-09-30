@@ -12,6 +12,10 @@
     $user = User::find_by_id($user_id);
 
     //defines the path to the requested page's content
+    $class_bs = '';
+    $class_ma = '';
+    $class_s = '';
+    $class_rs = '';
     switch ($page) {
         case 'logout':
             unset($_SESSION['user']);

@@ -7,7 +7,7 @@
     //SITE_ROOT::defines the file system path to the project
     //must be changed if on a different machine
     defined('SITE_ROOT')?null:
-    define('SITE_ROOT', DS.'var'.DS.'www'.DS.'html'.DS.'ugccc');
+    define('SITE_ROOT', DS.'wamp64'.DS.'www'.DS.'ugccc');
 
     //LIB_PATH::defines the path to the includes folder which contains all
     //the libraries
