@@ -39,6 +39,11 @@
             $class_bs = "active";
             $page_title = "Book Session";
             break;
+        case 'assign_counsellor':
+            $content = "contents/assign_counsellor.php";
+            $page_title = "Assign Counsellor";
+            $complaint_id = $_GET['cid'];
+            break;
 
         case 'sessions':
         default:

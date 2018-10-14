@@ -56,7 +56,7 @@
                                 <td>Others...</td>
                                 <td><?php echo $complaint->short_desc; ?></td>
                                 <td>
-                                   <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="#assign_sess_modal" class="assignModal"> Assign Counsellor </a> 
+                                   <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="?page=assign_counsellor&cid=<?php echo $complaint->id; ?>" class="assignModal"> Assign Counsellor </a> 
                                 </td>
                             </tr>
                             <?php $i++; } ?>
@@ -129,7 +129,8 @@
                                     <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="#end_sess_modal" class="endModal"> End </a> 
                                     <?php } } } ?>
                                     <?php if(($complaint->date_couns_ended != "")&&($complaint->date_couns_started != "")){ ?>
-                                    <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="#refer_sess_modal" class="referModal"> Refer </a> 
+                                    <a data-toggle ="modal" data-id="<?php echo $complaint->id; ?>" href="?page=assign_counsellor&cid=<?php echo $complaint->id; ?>" class="referModal"> Refer </a> |
+                                    <a data-toggle ="modal" data-id="<?php echo $booking->id; ?>" href="#remove_sess_modal" class="removeModal"> Remove </a>
                                     <?php } ?>
                                 </td>
                             </tr>
